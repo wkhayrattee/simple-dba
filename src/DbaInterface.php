@@ -12,47 +12,54 @@ namespace SimpleDba;
 interface DbaInterface
 {
     /**
+     * Should create a resource handler with the given path
+     * Will call open()
+     *
+     * DbaInterface constructor.
+     *
+     * @param string $path
+     * @param string $handler_name
+     */
+    public function __construct(string $path, string $handler_name);
+
+    /**
      * Close a DBA database
      *
      * closes the established database and frees all resources of the specified database handle
-     *
-     * @param resource $handler
      */
-    public function close($handler): void;
+    public function close(): void;
 
     /**
      * Delete DBA entry specified by key
+     * We will also perform an optimise
      *
      * Note that the memory is lost after doing this.
      * If you had a key 'foo' with a value of 1000 bytes, that 1000 bytes is lost,
      * and the DB file size will reflect this.
      *
      * @param $key
-     * @param resource $handler
      *
      * @return bool (Returns true on success or false on failure)
      */
-    public function delete($key, $handler): bool;
+    public function delete($key): bool;
 
     /**
      * Check whether key exists
      *
      * @param $key
-     * @param resource $handler
      *
      * @return bool (true if the key exists, false otherwise)
      */
-    public function exists($key, $handler): bool;
+    public function exists($key): bool;
 
     /**
      * Fetch single data specified by key
      *
      * @param $key
-     * @param resource $handler
      *
      * @return mixed (Returns the associated string if the key/data pair is found, false otherwise)
      */
-    public function fetch($key, $handler);
+    public function fetch($key);
 
     /**
      * Fetch first key
@@ -60,31 +67,26 @@ interface DbaInterface
      * returns the first key of the database and resets the internal key pointer.
      * This permits a linear search through the whole database
      *
-     * @param resource $handler
-     *
      * @return mixed (Returns the key on success or false on failure)
      */
-    public function firstKey($handler);
+    public function firstKey();
 
     /**
      * Fetch the next key of the database and advances the internal key pointer
      *
-     * @param resource $handler
-     *
      * @return mixed (Returns the key on success or false on failure)
      */
-    public function nextKey($handler);
+    public function nextKey();
 
     /**
      * Inserts the entry described with key and value into the database
      *
      * @param $key
      * @param string $value
-     * @param resource $handler
      *
      * @return bool (true on success or false on failure)
      */
-    public function insert($key, string $value, $handler): bool;
+    public function insert($key, string $value): bool;
 
     /**
      * Open the dba
@@ -94,11 +96,10 @@ interface DbaInterface
      *
      * @param string $path (Commonly a regular path in your filesystem)
      * @param string $mode (see: https://www.php.net/manual/en/function.dba-open.php)
-     * @param resource $handler
      *
      * @return mixed (Returns a positive (resource) handle on success or false on failure)
      */
-    public function open(string $path, $handler, string $mode = 'n');
+    public function open(string $path, string $mode = 'n');
 
     /**
      * Open the dba persistently
@@ -108,11 +109,10 @@ interface DbaInterface
      *
      * @param string $path (Commonly a regular path in your filesystem)
      * @param string $mode (see: https://www.php.net/manual/en/function.dba-open.php)
-     * @param resource $handler
      *
      * @return mixed (Returns a positive (resource) handle on success or false on failure)
      */
-    public function open_persistent(string $path, $handler, string $mode = 'n');
+    public function open_persistent(string $path, string $mode = 'n');
 
     /**
      * Optimizes the underlying database
@@ -125,11 +125,9 @@ interface DbaInterface
      * the db continues to grow, wasting space. So, it is necessary, sometimes, to re-pack the
      * db in order to remove unused data from the db itself
      *
-     * @param resource $handler
-     *
      * @return bool (true on success or false on failure)
      */
-    public function optimise($handler): bool;
+    public function optimise(): bool;
 
     /**
      * Synchronizes the database. This will probably trigger a physical write to the disk, if supported
@@ -138,11 +136,9 @@ interface DbaInterface
      * As you insert records, they may be cached in memory by the underlying engine.
      * Other processes reading from the database will not see these new records until synchronization
      *
-     * @param resource $handler
-     *
      * @return bool (true on success or false on failure)
      */
-    public function sync($handler): bool;
+    public function sync(): bool;
 
     /**
      * Replaces an entry
