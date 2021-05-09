@@ -1,0 +1,13 @@
+*~
+.DS_Store
+.idea
+.php_cs.cache
+.svn
+.cvs
+*.bak
+*.swp
+Thumbs.db
+debug.log
+composer.lock
+/vendor
+.gitattributes

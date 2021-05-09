@@ -1,0 +1,20 @@
+{
+  "name": "sevenphp/simple-dba",
+  "description": "A simple wrapper about php dba functions",
+  "keywords": ["php dba"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wasseem Khayrattee",
+      "email": "savantphp@7php.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "SimpleDba\\": "src/"
+    }
+  }
+}
