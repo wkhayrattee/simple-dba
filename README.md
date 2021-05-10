@@ -7,3 +7,20 @@
 - Unit testing
 - Get started with a simple example
 - Publish in Packagist when ready
+
+## Unit Testing
+
+### Install PEST
+
+I find PEST a little more elegant, let's try this.
+
+```
+$ composer require pestphp/pest --dev --with-all-dependencies
+$ ./vendor/bin/pest --init
+```
+
+### Using PEST
+
+```
+$ ./vendor/bin/pest
+```
