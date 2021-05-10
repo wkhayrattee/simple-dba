@@ -58,7 +58,7 @@ class Dba implements DbaInterface
      *
      * @return bool
      */
-    protected function createPathIfNone()
+    public function createPathIfNone()
     {
         if (is_dir($this->path)) {
             return true;
@@ -67,6 +67,7 @@ class Dba implements DbaInterface
                 unlink($this->path);
             }
         }
+
         return mkdir($this->path, 0755, true);
     }
 
@@ -115,6 +116,7 @@ class Dba implements DbaInterface
             //Let's make this consistent
             $result = false;
         }
+
         return $result;
     }
 
@@ -151,7 +153,16 @@ class Dba implements DbaInterface
      */
     public function nextKey()
     {
-        return dba_nextkey($this->resource_handle);
+        try {
+            $result = dba_nextkey($this->resource_handle);
+        } catch (\Exception $exception) {
+            //that sucker returns an exception with message "Invalid argument"
+            //On the php docs, it says it will return FALSE - what a lie.
+            //Let's make this consistent
+            $result = false;
+        }
+
+        return $result;
     }
 
     /**
@@ -195,11 +206,10 @@ class Dba implements DbaInterface
      *
      * @param string $key
      * @param string $value
-     * @param resource $handler
      *
      * @return bool
      */
-    public function replace(string $key, string $value, $handler): bool
+    public function replace(string $key, string $value): bool
     {
         //1) remove the existing entrey with given ley
         if ($this->exists($key)) {
