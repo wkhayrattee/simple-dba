@@ -150,9 +150,8 @@ interface DbaInterface
      *
      * @param string $key
      * @param string $value
-     * @param resource $handler
      *
      * @return bool (true on success or false on failure)
      */
-    public function replace(string $key, string $value, $handler): bool;
+    public function replace(string $key, string $value): bool;
 }
