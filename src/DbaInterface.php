@@ -94,12 +94,11 @@ interface DbaInterface
      *
      * use 'n' for create, truncate and read/write access
      *
-     * @param string $path (Commonly a regular path in your filesystem)
      * @param string $mode (see: https://www.php.net/manual/en/function.dba-open.php)
      *
      * @return mixed (Returns a positive (resource) handle on success or false on failure)
      */
-    public function open(string $path, string $mode = 'n');
+    public function open(string $mode = 'n');
 
     /**
      * Open the dba persistently
@@ -107,12 +106,11 @@ interface DbaInterface
      *
      * use 'n' for create, truncate and read/write access
      *
-     * @param string $path (Commonly a regular path in your filesystem)
      * @param string $mode (see: https://www.php.net/manual/en/function.dba-open.php)
      *
      * @return mixed (Returns a positive (resource) handle on success or false on failure)
      */
-    public function open_persistent(string $path, string $mode = 'n');
+    public function open_persistent(string $mode = 'n');
 
     /**
      * Optimizes the underlying database

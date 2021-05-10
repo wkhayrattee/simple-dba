@@ -11,11 +11,11 @@ namespace SimpleDba;
 
 class Dba implements DbaInterface
 {
-    private $handler_name;
-    private $path;
+    public $handler_name;
+    public $path;
     public $mode;
     /** @var resource */
-    private $resource_handle;
+    public $resource_handle;
 
     /**
      * You can find the list of handlers here: https://www.php.net/manual/en/dba.requirements.php
@@ -33,29 +33,27 @@ class Dba implements DbaInterface
     /**
      * Open the dba
      *
-     * @param string $path
      * @param string $mode
      *
      * @return mixed|void
      */
-    public function open(string $path, string $mode = 'n')
+    public function open(string $mode = 'n')
     {
         $this->mode = $mode;
-        $this->resource_handle = dba_open($this->path, $this->mode, $this->handler_name);
+        return $this->resource_handle = dba_open($this->path, $this->mode, $this->handler_name);
     }
 
     /**
      * Open the dba persistently
      *
-     * @param string $path
      * @param string $mode
      *
      * @return mixed|void
      */
-    public function open_persistent(string $path, string $mode = 'n')
+    public function open_persistent(string $mode = 'n')
     {
         $this->mode = $mode;
-        $this->resource_handle = dba_popen($this->path, $this->mode, $this->handler_name);
+        return $this->resource_handle = dba_popen($this->path, $this->mode, $this->handler_name);
     }
 
     /**
@@ -64,6 +62,7 @@ class Dba implements DbaInterface
     public function close(): void
     {
         dba_close($this->resource_handle);
+        $this->resource_handle = null; //else pestPHP issue: Failed asserting that NULL is null
     }
 
     /**
