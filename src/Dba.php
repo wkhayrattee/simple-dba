@@ -11,49 +11,73 @@ namespace SimpleDba;
 
 class Dba implements DbaInterface
 {
-    public $handler_name;
-    public $path;
-    public $mode;
+    public string $handler_name;
+    public string $full_path;
+    public string $path;
+    public string $store_name;
+    public string $mode;
     /** @var resource */
-    public $resource_handle;
+    public $resource_handle = null;
 
     /**
      * You can find the list of handlers here: https://www.php.net/manual/en/dba.requirements.php
      *
-     * @param string $path
-     * @param string $handler
+     * @param string $path (without trailing slash)
+     * @param string $store_name
      * @param string $handler_name
      */
-    public function __construct(string $path, string $handler_name = 'lmdb')
+    public function __construct(string $path, string $store_name, string $handler_name = 'lmdb')
     {
         $this->path = $path;
+        $this->store_name = $store_name;
+        $this->full_path = $path . '/' . $store_name;
         $this->handler_name = $handler_name;
     }
 
     /**
      * Open the dba
-     *
+     * 
      * @param string $mode
-     *
-     * @return mixed|void
+     * @return false|mixed|resource
+     * @throws \Exception
      */
     public function open(string $mode = 'n')
     {
+        $this->createPathIfNone();
         $this->mode = $mode;
-        return $this->resource_handle = dba_open($this->path, $this->mode, $this->handler_name);
+        return $this->resource_handle = dba_open($this->full_path, $this->mode, $this->handler_name);
+    }
+
+    /**
+     * Check if $path is valid
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    protected function createPathIfNone()
+    {
+        if (is_dir($this->path)) {
+            return true;
+        }
+        $result = mkdir($this->path);
+        if ($result === true) {
+            return true;
+        }
+        throw new \Exception('There is a problem with the given path, cannot create it');
     }
 
     /**
      * Open the dba persistently
      *
      * @param string $mode
-     *
-     * @return mixed|void
+     * @return false|mixed|resource
+     * @throws \Exception
      */
     public function open_persistent(string $mode = 'n')
     {
+        $this->createPathIfNone();
         $this->mode = $mode;
-        return $this->resource_handle = dba_popen($this->path, $this->mode, $this->handler_name);
+        return $this->resource_handle = dba_popen($this->full_path, $this->mode, $this->handler_name);
     }
 
     /**
@@ -63,6 +87,7 @@ class Dba implements DbaInterface
     {
         dba_close($this->resource_handle);
         $this->resource_handle = null; //else pestPHP issue: Failed asserting that NULL is null
+        //see my github issue here: https://github.com/pestphp/pest/issues/294
     }
 
     /**
@@ -81,7 +106,7 @@ class Dba implements DbaInterface
     /**
      * Check whether key exists
      *
-     * @param mixed $key
+     * @param bool $key
      */
     public function exists($key): bool
     {
