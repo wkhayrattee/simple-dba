@@ -117,8 +117,9 @@ class Dba implements DbaInterface
     /**
      * Insert entry
      *
-     * @param mixed $key
+     * @param $key
      * @param string $value
+     * @return bool
      */
     public function insert($key, string $value): bool
     {
@@ -130,6 +131,7 @@ class Dba implements DbaInterface
 
     /**
      * Optimizes the underlying database
+     * @codeCoverageIgnore
      */
     public function optimise(): bool
     {
@@ -138,6 +140,7 @@ class Dba implements DbaInterface
 
     /**
      * Synchronize database
+     * @codeCoverageIgnore
      */
     public function sync(): bool
     {
@@ -149,7 +152,8 @@ class Dba implements DbaInterface
      *
      * @param string $key
      * @param string $value
-     * @param mixed $handler
+     * @param resource $handler
+     * @return bool
      */
     public function replace(string $key, string $value, $handler): bool
     {
