@@ -36,33 +36,38 @@ class Dba implements DbaInterface
 
     /**
      * Open the dba
-     * 
+     *
      * @param string $mode
-     * @return false|mixed|resource
+     *
      * @throws \Exception
+     *
+     * @return false|mixed|resource
      */
     public function open(string $mode = 'n')
     {
         $this->createPathIfNone();
         $this->mode = $mode;
+
         return $this->resource_handle = dba_open($this->full_path, $this->mode, $this->handler_name);
     }
 
     /**
      * Check if $path is valid
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     protected function createPathIfNone()
     {
         if (is_dir($this->path)) {
             return true;
         }
-        $result = mkdir($this->path);
+        $result = mkdir($this->path, 0755, true);
         if ($result === true) {
             return true;
         }
+
         throw new \Exception('There is a problem with the given path, cannot create it');
     }
 
@@ -70,13 +75,16 @@ class Dba implements DbaInterface
      * Open the dba persistently
      *
      * @param string $mode
-     * @return false|mixed|resource
+     *
      * @throws \Exception
+     *
+     * @return false|mixed|resource
      */
     public function open_persistent(string $mode = 'n')
     {
         $this->createPathIfNone();
         $this->mode = $mode;
+
         return $this->resource_handle = dba_popen($this->full_path, $this->mode, $this->handler_name);
     }
 
@@ -144,6 +152,7 @@ class Dba implements DbaInterface
      *
      * @param $key
      * @param string $value
+     *
      * @return bool
      */
     public function insert($key, string $value): bool
@@ -156,6 +165,7 @@ class Dba implements DbaInterface
 
     /**
      * Optimizes the underlying database
+     *
      * @codeCoverageIgnore
      */
     public function optimise(): bool
@@ -165,6 +175,7 @@ class Dba implements DbaInterface
 
     /**
      * Synchronize database
+     *
      * @codeCoverageIgnore
      */
     public function sync(): bool
@@ -178,6 +189,7 @@ class Dba implements DbaInterface
      * @param string $key
      * @param string $value
      * @param resource $handler
+     *
      * @return bool
      */
     public function replace(string $key, string $value, $handler): bool
