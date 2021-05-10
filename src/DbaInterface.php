@@ -17,10 +17,11 @@ interface DbaInterface
      *
      * DbaInterface constructor.
      *
-     * @param string $path
+     * @param string $path (absolute path to the folder where your store will live)
+     * @param string $store_name (the name of your store)
      * @param string $handler_name
      */
-    public function __construct(string $path, string $handler_name);
+    public function __construct(string $path, string $store_name, string $handler_name);
 
     /**
      * Close a DBA database
