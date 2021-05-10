@@ -13,10 +13,30 @@
  * Setup object
  * @return \SimpleDba\Dba
  */
-//function getDbaObject() : \SimpleDba\Dba
-//{
-//    return new \SimpleDba\Dba('/var/www/storage', 'lmdb');
-//}
+function getDbaObject() : \SimpleDba\Dba
+{
+    return new \SimpleDba\Dba(getPath(), getStoreName(), getHandlerName());
+}
+
+function getPath()
+{
+    return '/var/www/storage';
+}
+
+function getStoreName()
+{
+    return 'greetings_store';
+}
+
+function getHandlerName()
+{
+    return 'lmdb';
+}
+
+function rmdirRecursively($directory)
+{
+    shell_exec('rm -rf ' . getPath());
+}
 
 /*
 |--------------------------------------------------------------------------
