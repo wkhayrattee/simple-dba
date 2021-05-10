@@ -30,7 +30,7 @@ class Dba implements DbaInterface
     {
         $this->path = $path;
         $this->store_name = $store_name;
-        $this->full_path = $path . '/' . $store_name;
+        $this->full_path = $path . DIRECTORY_SEPARATOR . $store_name;
         $this->handler_name = $handler_name;
     }
 
@@ -100,13 +100,21 @@ class Dba implements DbaInterface
     /**
      * Delete DBA entry specified by key
      *
+     * Note: we are also correcting an inconsistency here
+     *
      * @param mixed $key
      */
     public function delete($key): bool
     {
-        $result = dba_delete($key, $this->resource_handle);
-        $this->optimise();
-
+        try {
+            $result = dba_delete($key, $this->resource_handle);
+            $this->optimise();
+        } catch (\Exception $exception) {
+            //that sucker returns an exception with message "MDB_NOTFOUND: No matching key/data pair found"
+            //On the php docs, it says it will return FALSE - what a lie.
+            //Let's make this consistent
+            $result = false;
+        }
         return $result;
     }
 
