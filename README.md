@@ -24,3 +24,17 @@ $ ./vendor/bin/pest --init
 ```
 $ ./vendor/bin/pest
 ```
+
+### Test Code Coverage
+
+- We'll use [PCOV](https://github.com/krakjoe/pcov)
+- Install:
+```
+$ apt-get install php7.4-pcov
+```
+
+- Execute the coverage:
+
+```
+$ ./vendor/bin/pest --coverage
+```
