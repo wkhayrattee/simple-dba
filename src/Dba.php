@@ -62,13 +62,12 @@ class Dba implements DbaInterface
     {
         if (is_dir($this->path)) {
             return true;
+        } else {
+            if (is_file($this->path)) {
+                unlink($this->path);
+            }
         }
-        $result = mkdir($this->path, 0755, true);
-        if ($result === true) {
-            return true;
-        }
-
-        throw new \Exception('There is a problem with the given path, cannot create it');
+        return mkdir($this->path, 0755, true);
     }
 
     /**
