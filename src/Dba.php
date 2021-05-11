@@ -109,6 +109,7 @@ class Dba implements DbaInterface
     {
         try {
             $result = dba_delete($key, $this->resource_handle);
+            $this->sync();
             $this->optimise();
         } catch (\Exception $exception) {
             //that sucker returns an exception with message "MDB_NOTFOUND: No matching key/data pair found"
@@ -176,6 +177,7 @@ class Dba implements DbaInterface
     public function insert($key, string $value): bool
     {
         $result = dba_insert($key, $value, $this->resource_handle);
+        $this->sync();
         $this->optimise();
 
         return $result;
