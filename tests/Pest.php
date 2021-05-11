@@ -9,33 +9,57 @@
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+use SimpleDba\Dba;
+
 /**
- * Setup object
- * @return \SimpleDba\Dba
+ * Setup object for LMDB dba
+ *
+ * @return Dba
  */
-function getDbaObject() : \SimpleDba\Dba
+function getLmdbDbaObject(): Dba
 {
-    return new \SimpleDba\Dba(getPath(), getStoreName(), getHandlerName());
+    return new Dba(getDbaPath(), getLmdbStoreName(), getHandlerName());
 }
 
-function getPath()
+/**
+ * Setup object for flatfile dba
+ *
+ * @return Dba
+ */
+function getFlatFileDbaObject(): Dba
 {
-    return '/var/www/storage';
+    return new Dba(getFlatFilePath(), getFlatFileStoreName(), getHandlerName('flatfile'));
 }
 
-function getStoreName()
+function getDbaPath()
+{
+    return '/var/www/storage/lmdb';
+}
+
+function getFlatFilePath()
+{
+    return '/var/www/storage/flatfile';
+}
+
+function getLmdbStoreName()
 {
     return 'greetings_store';
 }
 
-function getHandlerName()
+function getFlatFileStoreName()
 {
-    return 'lmdb';
+    return 'greetings_file_store';
+}
+
+function getHandlerName($dba = 'lmdb') //also flatfile
+{
+    return $dba;
 }
 
 function rmdirRecursively($directory)
 {
-    shell_exec('rm -rf ' . getPath());
+    shell_exec('rm -rf ' . $directory);
 }
 
 /*
