@@ -213,11 +213,11 @@ class Dba implements DbaInterface
      */
     public function replace(string $key, string $value): bool
     {
-        //1) remove the existing entrey with given ley
+        //1) remove the existing entry with given key
         if ($this->exists($key)) {
             $this->delete($key);
         }
-        //2) then, we re-add (i.e INSERT) that same key again, but with the updated value
+        //2) then, we re-add (i.e insert) that same key again, BUT with its updated VALUE
         return $this->insert($key, $value);
     }
 }
